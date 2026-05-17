@@ -1,0 +1,14 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY common.py client.py ./
+
+ENV SERVER_HOST=""
+ENV SERVER_PORT=8443
+ENV LOCAL_PORT=1080
+
+EXPOSE 1080
+CMD ["sh", "-c", "python3 client.py --server-host $SERVER_HOST --server-port $SERVER_PORT --local-port $LOCAL_PORT --local-host 0.0.0.0"]

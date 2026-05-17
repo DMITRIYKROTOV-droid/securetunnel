@@ -1,0 +1,22 @@
+[Unit]
+Description=SecureTunnel Server — encrypted proxy server
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+WorkingDirectory=/opt/securetunnel
+ExecStart=/usr/bin/python3 /opt/securetunnel/server.py --host 0.0.0.0 --port 8443
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

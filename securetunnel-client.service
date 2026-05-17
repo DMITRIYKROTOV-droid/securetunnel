@@ -1,0 +1,27 @@
+[Unit]
+Description=SecureTunnel Client — local SOCKS5 proxy with E2E encryption
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+WorkingDirectory=/opt/securetunnel
+# Замените 1.2.3.4 на IP вашего сервера
+ExecStart=/usr/bin/python3 /opt/securetunnel/client.py \
+    --server-host 1.2.3.4 \
+    --server-port 8443 \
+    --local-host 127.0.0.1 \
+    --local-port 1080
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

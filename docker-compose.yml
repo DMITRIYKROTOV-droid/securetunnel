@@ -1,0 +1,22 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "8443:8443"
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    ports:
+      - "1080:1080"
+    environment:
+      SERVER_HOST: server
+      SERVER_PORT: 8443
+      LOCAL_PORT: 1080
+    depends_on:
+      - server
+    restart: unless-stopped
