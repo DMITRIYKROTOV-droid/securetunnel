@@ -5,10 +5,9 @@ SecureTunnel — тесты (pytest + pytest-asyncio).
 
 import asyncio
 import pytest
-import pytest_asyncio
 from common import (
     generate_keypair, public_key_bytes, derive_shared_key,
-    SecureChannel, server_handshake, client_handshake
+    server_handshake, client_handshake
 )
 
 
@@ -84,7 +83,8 @@ def make_pipe():
         write = ab.write
         drain = ab.drain
         close = ab.close
-        get_extra_info = lambda self, x: ("127.0.0.1", 9999)
+        def get_extra_info(self, x):
+            return ("127.0.0.1", 9999)
 
     class ReaderB:
         readexactly = ab.readexactly
@@ -94,7 +94,8 @@ def make_pipe():
         write = ba.write
         drain = ba.drain
         close = ba.close
-        get_extra_info = lambda self, x: ("127.0.0.1", 9998)
+        def get_extra_info(self, x):
+            return ("127.0.0.1", 9998)
 
     return (ReaderA(), WriterA()), (ReaderB(), WriterB())
 

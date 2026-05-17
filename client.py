@@ -127,7 +127,9 @@ async def handle_local(local_reader, local_writer, server_host: str, server_port
 
 
 async def main(local_host: str, local_port: int, server_host: str, server_port: int):
-    handler = lambda r, w: handle_local(r, w, server_host, server_port)
+    async def handler(r, w):
+        await handle_local(r, w, server_host, server_port)
+
     server = await asyncio.start_server(handler, local_host, local_port)
     addr = server.sockets[0].getsockname()
     log.info(
